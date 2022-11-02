@@ -13,9 +13,11 @@ import SearchIcon from "@mui/icons-material/Search";
 import {
   doc,
   setDoc,
-  getDocs,
   collection,
   deleteDoc,
+  updateDoc,
+  increment,
+  onSnapshot,
 } from "firebase/firestore";
 import { db } from "../index.js";
 import { toast } from "material-react-toastify";
@@ -36,7 +38,7 @@ const IMS = () => {
   const [openAddProduct, setOpenAddProduct] = useState(false);
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
   const [openEditProduct, setOpenEditProduct] = useState(false);
-  const [openSellProdcts, setOpenSellProdcts] = useState(false);
+  const [openSellProdcts, setOpenSellProducts] = useState(false);
   const [productsData, setProductsData] = useState([]);
   const [originalProductsArray, setOriginalProductsArray] = useState([]);
   const [productSearchValue, setproductSearchValue] = useState("");
@@ -46,21 +48,18 @@ const IMS = () => {
 
   useEffect(() => {
     // console.log("the component has loaded");
-    let productsArray = [...productsData];
 
     const colRef = collection(db, "products");
-    getDocs(colRef)
-      .then((snapshot) => {
-        snapshot.docs.forEach((doc) => {
-          // console.log(doc.id, doc.data());
-          productsArray.push(doc.data());
-        });
-      })
-      .then(() => {
-        console.log("all products obtained", productsArray);
-        setProductsData(productsArray);
-        setOriginalProductsArray(productsArray); //for reference to original list of products
+    onSnapshot(colRef, (snapshot) => {
+      let productsArray = [...productsData];
+      snapshot.docs.forEach((doc) => {
+        // console.log(doc.id, doc.data());
+        productsArray.push(doc.data());
       });
+      // console.log("all products obtained", productsArray);
+      setProductsData(productsArray);
+      setOriginalProductsArray(productsArray); //for reference to original list of products
+    });
   }, []);
 
   const showAddProduct = () => {
@@ -120,10 +119,10 @@ const IMS = () => {
     }
     // console.log("products to sell", productsToSell);
     setProductsBeingSold(productsToSell);
-    setOpenSellProdcts(true);
+    setOpenSellProducts(true);
   };
   const hideSellProducts = () => {
-    setOpenSellProdcts(false);
+    setOpenSellProducts(false);
   };
   const showEditProduct = () => {
     // console.log("showing the edit product modal");
@@ -136,6 +135,15 @@ const IMS = () => {
   };
   const hideEditProduct = () => {
     setOpenEditProduct(false);
+    setProduct({
+      name: "",
+      description: "",
+      category: "",
+      costPrice: "",
+      sellingPrice: "",
+      // measurementUnit: "",
+      quantityAvailable: "",
+    });
   };
 
   const handleChange = ({ currentTarget: input }) => {
@@ -190,7 +198,7 @@ const IMS = () => {
     },
     {
       value: "mas",
-      label: "Mason",
+      label: "Masonry",
     },
     {
       value: "mch",
@@ -241,7 +249,7 @@ const IMS = () => {
     return productCode;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     // console.log("submitting product");
 
@@ -292,23 +300,20 @@ const IMS = () => {
     };
 
     // console.log("product code", productCode);
-    await setDoc(doc(db, "products", productCode), newProduct).then(() => {
-      productsArray.push(newProduct);
-      setProductsData(productsArray);
-      setOriginalProductsArray(productsArray);
-      setProduct({
-        name: "",
-        description: "",
-        category: "",
-        costPrice: "",
-        sellingPrice: "",
-        // measurementUnit: "",
-        quantityAvailable: "",
-      });
-      addProductButton.disabled = false;
-      addProductButton.style.backgroundColor = "green";
-      toast.success("Product was added successfully");
-      console.log("data has been added");
+    setDoc(doc(db, "products", productCode), newProduct);
+    addProductButton.disabled = false;
+    addProductButton.style.backgroundColor = "green";
+    toast.success("Product was added successfully");
+    console.log("data has been added");
+
+    setProduct({
+      name: "",
+      description: "",
+      category: "",
+      costPrice: "",
+      sellingPrice: "",
+      // measurementUnit: "",
+      quantityAvailable: "",
     });
   };
 
@@ -382,30 +387,20 @@ const IMS = () => {
     setOpenConfirmDelete(false);
     console.log(selectedRows);
 
-    console.log("deleting the selected products");
-    let productsArray = [...originalProductsArray];
-    console.log("original products array length", productsArray.length);
+    // console.log("deleting the selected products");
 
     for (let x = 0; x < selectedRows.length; x++) {
-      const productIndex = productsArray.findIndex(
-        (product) => product.productCode === selectedRows[x].productCode
+      deleteDoc(doc(db, "products", selectedRows[x].productCode));
+      console.log(
+        "successfully deleted data with code",
+        selectedRows[x].productCode
       );
-      productsArray.splice(productIndex, 1);
-      deleteDoc(doc(db, "products", selectedRows[x].productCode)).then(() => {
-        console.log(
-          "successfully deleted data with code",
-          selectedRows[x].productCode
-        );
-
-        toast.success(
-          `sucessfully deleted ${selectedRows[x].name} (${selectedRows[x].description})`
-        );
-      });
+      toast.success(
+        `sucessfully deleted ${selectedRows[x].name} (${selectedRows[x].description})`
+      );
     }
 
     handleClearSelectedDataRows();
-    setProductsData(productsArray);
-    setOriginalProductsArray(productsArray);
   };
 
   const doUpdateProduct = (e) => {
@@ -436,32 +431,24 @@ const IMS = () => {
       quantityAvailable: Number(product.quantityAvailable),
       productCode: productCode,
     };
-    let productsArray = [...originalProductsArray];
+    // let productsArray = [...originalProductsArray];
 
-    setDoc(doc(db, "products", productCode), newProduct).then(() => {
-      productsArray.push(newProduct);
-      setProductsData(productsArray);
-      setOriginalProductsArray(productsArray);
-      setProduct({
-        name: "",
-        description: "",
-        category: "",
-        costPrice: "",
-        sellingPrice: "",
-        // measurementUnit: "",
-        quantityAvailable: "",
-      });
+    setDoc(doc(db, "products", productCode), newProduct);
 
-      const indexOfnewProduct = productsArray.findIndex(
-        (prod) => prod.productCode === newProduct.productCode
-      );
-      productsArray[indexOfnewProduct] = newProduct;
-      setProductsData(productsArray);
-      setOpenEditProduct(false);
-      handleClearSelectedDataRows();
-      toast.success("Product was updated successfully");
-      console.log("data has been updated");
+    setProduct({
+      name: "",
+      description: "",
+      category: "",
+      costPrice: "",
+      sellingPrice: "",
+      // measurementUnit: "",
+      quantityAvailable: "",
     });
+
+    setOpenEditProduct(false);
+    handleClearSelectedDataRows();
+    toast.success("Product was updated successfully");
+    console.log("data has been updated");
   };
 
   const doSellProducts = (e) => {
@@ -521,15 +508,28 @@ const IMS = () => {
       soldProduct.profitData.profitMargin = Number(profitMargin);
       // return;
 
+      let productsArray = [...originalProductsArray];
+      const indexOfEditedProduct = productsArray.findIndex(
+        (prod) => prod.productCode === soldProduct.productCode
+      );
+      productsArray[indexOfEditedProduct].quantityAvailable =
+        productsArray[indexOfEditedProduct].quantityAvailable -
+        soldProduct.quantitySold;
+      setProductsData(productsArray);
+
       setDoc(doc(db, "sales", productFirebaseId), soldProduct).then(() => {
         toast.success(
           `${soldProduct.productName} (${soldProduct.productDescription}) confirmed sold.`
         );
       });
+
+      updateDoc(doc(db, "products", soldProduct.productCode.toString()), {
+        quantityAvailable: increment(-soldProduct.quantitySold),
+      });
     }
 
     setProductsBeingSold({});
-    setOpenSellProdcts(false);
+    setOpenSellProducts(false);
     handleClearSelectedDataRows();
   };
 

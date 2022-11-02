@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { initializeApp } from "firebase/app";
-import { getDoc, getFirestore, doc } from "firebase/firestore";
+import { getFirestore, enableIndexedDbPersistence } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
@@ -34,26 +34,18 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-// onAuthStateChanged(auth, (user) => {
-//   console.log(user);
-//   if (user) {
-//     console.log("user", user);
-//     const userId = user.uid;
-//     const docRef = doc(db, "users", userId);
-//     const user = docRef.getDoc();
-//     if (user.exists()) {
-//       console.log("user", user);
-//     } else {
-//       console.log("there is no user");
-//     }
-//     localStorage.setItem("currentUserId", userId);
-//   } else {
-//     // User is signed out.
-//     // console.log("user signed out");
-//     localStorage.removeItem("currentUser");
-//     localStorage.removeItem("currentUserId");
-//   }
-// });
+enableIndexedDbPersistence(db).catch((err) => {
+  if (err.code == "failed-precondition") {
+    // Multiple tabs open, persistence can only be enabled
+    // in one tab at a a time.
+    // ...
+    console.log("something went wrong with the firebase persistence");
+  } else if (err.code == "unimplemented") {
+    // The current browser does not support all of the
+    // features required to enable persistence
+    // ...
+  }
+});
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

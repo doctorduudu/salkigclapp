@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
-      content="Salki Global Company Limited. Borehole drilling and Construction, Hardware & Construction Logistics"
+      content="Salki Global CO. LTD. Inventory management system"
     />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
@@ -31,6 +31,18 @@
       <div class="content-wrapper">
         <noscript>You need to enable JavaScript to run this app.</noscript>
         <div id="root"></div>
+        <script>
+          if (navigator.serviceWorker) {
+            window.addEventListener("load", () => {
+              navigator.serviceWorker
+                .register("./serviceWorker.js")
+                .then((reg) =>
+                  console.log("service worker registered", reg.scope)
+                )
+                .catch((err) => console.log("service worker reg failed", err));
+            });
+          }
+        </script>
       </div>
     </div>
   </body>

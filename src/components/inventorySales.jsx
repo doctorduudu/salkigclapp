@@ -2,7 +2,7 @@ import { Divider, Grid, Typography, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import { useState, useEffect } from "react";
-import { getDocs, collection, doc, setDoc } from "firebase/firestore";
+import { onSnapshot, collection, doc, setDoc } from "firebase/firestore";
 import { db } from "../index.js";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -26,12 +26,6 @@ const InventorySales = () => {
   const [user, setUser] = useState({});
 
   useEffect(() => {
-    const sales = [];
-    let salesToday = [];
-    let salesThisWeek = [];
-    let salesThisMonth = [];
-    let salesThisYear = [];
-
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     setUser(currentUser);
 
@@ -41,90 +35,98 @@ const InventorySales = () => {
     const thisYear = dateObj.getFullYear();
 
     const colRef = collection(db, "sales");
-    getDocs(colRef)
-      .then((snapshot) => {
-        snapshot.docs.forEach((doc) => {
-          //   console.log(doc.id, doc.data());
-          const sale = doc.data();
-          sale.firebaseId = doc.id;
+    onSnapshot(colRef, (snapshot) => {
+      const sales = [];
+      let salesToday = [];
+      let salesThisWeek = [];
+      let salesThisMonth = [];
+      let salesThisYear = [];
 
-          const todaySpecific = dateObj.getDay(); /// number of days to subtract to get first day of the week
-          const todayInMilliSeconds = dateObj.getTime();
+      snapshot.docs.forEach((doc) => {
+        //   console.log(doc.id, doc.data());
+        const sale = doc.data();
+        sale.firebaseId = doc.id;
 
-          const oneDayInMilliSeconds = 86400000;
-          const monday =
-            todayInMilliSeconds - (todaySpecific - 1) * oneDayInMilliSeconds;
-          const tuesday = monday + oneDayInMilliSeconds;
-          const wednesday = tuesday + oneDayInMilliSeconds;
-          const thursday = wednesday + oneDayInMilliSeconds;
-          const friday = thursday + oneDayInMilliSeconds;
-          const saturday = friday + oneDayInMilliSeconds;
-          const sunday = saturday + oneDayInMilliSeconds;
+        const todaySpecific = dateObj.getDay(); /// number of days to subtract to get first day of the week
+        const todayInMilliSeconds = dateObj.getTime();
 
-          const daysOfTheWeek = [
-            monday,
-            tuesday,
-            wednesday,
-            thursday,
-            friday,
-            saturday,
-            sunday,
-          ];
-          let daysOfTheWeekString = [];
+        const oneDayInMilliSeconds = 86400000;
+        const monday =
+          todayInMilliSeconds - (todaySpecific - 1) * oneDayInMilliSeconds;
+        const tuesday = monday + oneDayInMilliSeconds;
+        const wednesday = tuesday + oneDayInMilliSeconds;
+        const thursday = wednesday + oneDayInMilliSeconds;
+        const friday = thursday + oneDayInMilliSeconds;
+        const saturday = friday + oneDayInMilliSeconds;
+        const sunday = saturday + oneDayInMilliSeconds;
 
-          for (let x = 0; x < daysOfTheWeek.length; x++) {
-            const date = new Date(daysOfTheWeek[x]);
-            daysOfTheWeekString.push(
-              `${date.getDate()} ${date.getMonth()} ${date.getFullYear()}`
-            );
-          }
-          // console.log(daysOfTheWeekString);
+        const daysOfTheWeek = [
+          monday,
+          tuesday,
+          wednesday,
+          thursday,
+          friday,
+          saturday,
+          sunday,
+        ];
+        let daysOfTheWeekString = [];
 
-          // console.log(daysOfTheWeek);
+        for (let x = 0; x < daysOfTheWeek.length; x++) {
+          const date = new Date(daysOfTheWeek[x]);
+          daysOfTheWeekString.push(
+            `${date.getDate()} ${date.getMonth()} ${date.getFullYear()}`
+          );
+        }
+        // console.log(daysOfTheWeekString);
 
-          // console.log(doc.data().productCode);
-          // console.log(doc.data().dateData.day);
-          // console.log("first day of week", sale.dateData.day - firstDayOfWeek);
-          // console.log("last day of week", sale.dateData.day + lastDayOfWeek);
+        // console.log(daysOfTheWeek);
 
-          if (sale.dateData.fullDay === today) {
-            salesToday.push(sale);
-            // console.log("today sale", sale);
-          }
-          if (
-            // sale.dateData.day > firstDayOfWeek - 1 &&
-            // sale.dateData.day < lastDayOfWeek + 1 &&
-            // sale.dateData.fullMonth === thisMonth
-            daysOfTheWeekString.includes(sale.dateData.fullDay)
-          ) {
-            // console.log("week sale", sale);
+        // console.log(doc.data().productCode);
+        // console.log(doc.data().dateData.day);
+        // console.log("first day of week", sale.dateData.day - firstDayOfWeek);
+        // console.log("last day of week", sale.dateData.day + lastDayOfWeek);
 
-            salesThisWeek.push(sale);
-          }
-          if (sale.dateData.fullMonth === thisMonth) {
-            // console.log("salesThisMonth", sale);
-            salesThisMonth.push(sale);
-          }
+        if (sale.dateData.fullDay === today) {
+          salesToday.push(sale);
+          // console.log("today sale", sale);
+        }
+        if (
+          // sale.dateData.day > firstDayOfWeek - 1 &&
+          // sale.dateData.day < lastDayOfWeek + 1 &&
+          // sale.dateData.fullMonth === thisMonth
+          daysOfTheWeekString.includes(sale.dateData.fullDay)
+        ) {
+          // console.log("week sale", sale);
 
-          if (sale.dateData.year === thisYear) {
-            salesThisYear.push(sale);
-          }
-          sales.push(sale);
-        });
-      })
-      .then(() => {
-        // console.log("all sales", sales);
-        // console.log("sales today", salesToday);
-        // console.log("sales this week", salesThisWeek);
-        // console.log("sales this month", salesThisMonth);
-        // console.log("sales this year", salesThisYear);
-        setSalesArray(sales);
-        setTodaySales(salesToday);
-        setWeekSales(salesThisWeek);
-        setMonthSales(salesThisMonth);
-        setYearSales(salesThisYear);
-        setPeriodSalesArray(salesToday); //default
+          salesThisWeek.push(sale);
+        }
+        if (sale.dateData.fullMonth === thisMonth) {
+          // console.log("salesThisMonth", sale);
+          salesThisMonth.push(sale);
+        }
+
+        if (sale.dateData.year === thisYear) {
+          salesThisYear.push(sale);
+        }
+        sales.push(sale);
       });
+
+      // console.log("all sales", sales);
+      // console.log("sales today", salesToday);
+      // console.log("sales this week", salesThisWeek);
+      // console.log("sales this month", salesThisMonth);
+      // console.log("sales this year", salesThisYear);
+      setSalesArray(sales);
+      setTodaySales(salesToday);
+      setWeekSales(salesThisWeek);
+      setMonthSales(salesThisMonth);
+      setYearSales(salesThisYear);
+      setPeriodSalesArray(salesToday); //default
+    });
+    // .then((snapshot) => {
+    // })
+    // .then(() => {
+    // });
   }, []);
 
   const getColor = (period) => {
@@ -297,14 +299,25 @@ const InventorySales = () => {
         return `${dayInWords}, ${hours % 12}:${minutes} pm`;
       } else if (activeButton === "month") {
         return `${date}${getDateTitle(date)}, ${hours % 12}:${minutes} pm`;
+      } else if (activeButton === "year") {
+        return `${monthInWords} ${date}${getDateTitle(date)}, ${
+          hours % 12
+        }:${minutes} pm`;
+      } else {
+        return `${hours % 12}:${minutes} pm`;
       }
-      return `${hours % 12}:${minutes} pm`;
-    } else if (activeButton === "year") {
-      return `${monthInWords} ${date}${getDateTitle(date)}, ${
-        hours % 12
-      }:${minutes} pm`;
     } else {
-      return `${hours}:${minutes} am`;
+      if (activeButton === "week") {
+        return `${dayInWords}, ${hours % 12}:${minutes} am`;
+      } else if (activeButton === "month") {
+        return `${date}${getDateTitle(date)}, ${hours % 12}:${minutes} am`;
+      } else if (activeButton === "year") {
+        return `${monthInWords} ${date}${getDateTitle(date)}, ${
+          hours % 12
+        }:${minutes} am`;
+      } else {
+        return `${hours}:${minutes} am`;
+      }
     }
   };
 
@@ -361,15 +374,15 @@ const InventorySales = () => {
       toast.success(
         "Sale was updated. Refresh if changes do not effect immediately"
       );
-      const indexOfSaleBeingEdited = periodSalesArray.findIndex(
-        (sale) => sale.saleId === saleToBeEdited.saleId
-      );
-      let newPeriodSalesArray = [...periodSalesArray];
-      newPeriodSalesArray[indexOfSaleBeingEdited] = saleToBeEdited;
-      setPeriodSalesArray(newPeriodSalesArray);
-      setOpenEditSale(false);
       editSaleButton.disabled = false;
       editSaleButton.style.backgroundColor = "green";
+      setOpenEditSale(false);
+      // const indexOfSaleBeingEdited = periodSalesArray.findIndex(
+      //   (sale) => sale.saleId === saleToBeEdited.saleId
+      // );
+      // let newPeriodSalesArray = [...periodSalesArray];
+      // newPeriodSalesArray[indexOfSaleBeingEdited] = saleToBeEdited;
+      // setPeriodSalesArray(newPeriodSalesArray);
     });
 
     console.log(saleOnEdit);

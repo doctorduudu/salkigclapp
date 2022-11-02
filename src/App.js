@@ -1,10 +1,9 @@
 import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
-import { ToastContainer, toast } from "material-react-toastify";
+import { ToastContainer } from "material-react-toastify";
 import IMS from "./components/ims";
 import NotFound from "./components/notFound";
 import NavBar from "./components/navBar";
 import "material-react-toastify/dist/ReactToastify.css";
-import Home from "./components/home";
 import "./App.css";
 import Footer from "./components/footer";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -29,17 +28,15 @@ const App = () => {
         <ToastContainer position="top-center" newestOnTop />
         <div>
           <Router>
-            <NavBar />
             <Routes>
-              <Route path="/" exact element={<Home />} />
-              <Route path="/home" exact element={<Home />} />
+              <Route path="/" exact element={<Dashboard />} />
+              <Route path="/db" exact element={<Dashboard />} />
               <Route path="/ims" exact element={<IMS />} />
               <Route
                 path="/inventory-sales"
                 exact
                 element={<InventorySales />}
               />
-              <Route path="/db" exact element={<Dashboard />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <Footer />

@@ -1,0 +1,116 @@
+[debug] [2022-11-02T20:30:51.026Z] ----------------------------------------------------------------------
+[debug] [2022-11-02T20:30:51.028Z] Command:       /usr/local/bin/node /usr/local/bin/firebase deploy --only hosting
+[debug] [2022-11-02T20:30:51.028Z] CLI Version:   11.15.0
+[debug] [2022-11-02T20:30:51.028Z] Platform:      darwin
+[debug] [2022-11-02T20:30:51.028Z] Node Version:  v16.18.0
+[debug] [2022-11-02T20:30:51.030Z] Time:          Wed Nov 02 2022 20:30:51 GMT+0000 (Greenwich Mean Time)
+[debug] [2022-11-02T20:30:51.030Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-11-02T20:30:51.088Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-11-02T20:30:51.088Z] > authorizing via signed-in user (abdulwadudsab@gmail.com)
+[debug] [2022-11-02T20:30:51.088Z] [iam] checking project salkigcl for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2022-11-02T20:30:51.090Z] > refreshing access token with scopes: []
+[debug] [2022-11-02T20:30:51.092Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2022-11-02T20:30:51.092Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2022-11-02T20:31:08.792Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2022-11-02T20:31:08.793Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2022-11-02T20:31:08.838Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/salkigcl:testIamPermissions [none]
+[debug] [2022-11-02T20:31:08.838Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/salkigcl:testIamPermissions x-goog-quota-user=projects/salkigcl
+[debug] [2022-11-02T20:31:08.839Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/salkigcl:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-11-02T20:31:18.302Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/salkigcl:testIamPermissions 200
+[debug] [2022-11-02T20:31:18.302Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/salkigcl:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-11-02T20:31:18.303Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/salkigcl [none]
+[debug] [2022-11-02T20:31:30.983Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/salkigcl 200
+[debug] [2022-11-02T20:31:30.984Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/salkigcl {"projectId":"salkigcl","projectNumber":"559234356201","displayName":"salkigcl","name":"projects/salkigcl","resources":{"hostingSite":"salkigcl","storageBucket":"salkigcl.appspot.com","locationId":"us-central"},"state":"ACTIVE","etag":"1_1deffe2a-a42a-4d39-852f-ed90a9ba6fb2"}
+[info] 
+[info] === Deploying to 'salkigcl'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2022-11-02T20:31:30.989Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/salkigcl-app/versions [none]
+[debug] [2022-11-02T20:31:30.989Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/salkigcl-app/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2022-11-02T20:31:35.178Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/salkigcl-app/versions 200
+[debug] [2022-11-02T20:31:35.178Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/salkigcl-app/versions {"name":"projects/559234356201/sites/salkigcl-app/versions/fe2873fdc4698a71","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[info] i  hosting[salkigcl-app]: beginning deploy... 
+[info] i  hosting[salkigcl-app]: found 16 files in build 
+[debug] [2022-11-02T20:31:35.188Z] [hosting] uploading with 200 concurrency
+[debug] [2022-11-02T20:31:35.722Z] [hosting] hash cache [YnVpbGQ] stored for 16 files
+[debug] [2022-11-02T20:31:35.723Z] [hosting][hash queue][FINAL] {"max":524,"min":10,"avg":46.9375,"active":0,"complete":16,"success":16,"errored":0,"retried":0,"total":16,"elapsed":531}
+[debug] [2022-11-02T20:31:35.723Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/559234356201/sites/salkigcl-app/versions/fe2873fdc4698a71:populateFiles [none]
+[debug] [2022-11-02T20:31:35.723Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/559234356201/sites/salkigcl-app/versions/fe2873fdc4698a71:populateFiles {"files":{"/asset-manifest.json":"ebcee23937aa197795b1595593aac94a31f2d903b0d5531558297ae10ccf80b2","/index.html":"f1674d1305e5fde4c0a1dd6b5529751cdd12ed8f77f193709a84147d64d02d62","/manifest.json":"01bc1b669102e4173f8a9451454ca60985836dbf38094b9304b1f02caa7a006d","/offline.html":"f11217f79ba5eab70052fa00c8d1e982866a2dea14d9b5cffbd8ba992ea79cd3","/robots.txt":"391d14b3c2f8c9143a27a28c7399585142228d4d1bdbe2c87ac946de411fa9a2","/serviceWorker.js":"822599e2bde9b2b7e6aeb897034729eedb7bdc20b1b7f4d96f86906e42de6f05","/static/css/main.8aa8cdcf.css":"7291eaf209025009a57439a020f23e741a495d975498a39601b92d1225d8e814","/static/js/787.340b0029.chunk.js":"3567e38ef0ac608e63b2f62e45c3d0696e90e69ec97b69fcd6acef494a48c03c","/static/js/main.2a7d0f6c.js.LICENSE.txt":"92af5586e255af5f639ae007e771e01cdfa4a649778761b617fc5ea709783ee3","/static/js/787.340b0029.chunk.js.map":"dd55d73b0878d2a835cb3b4c93256cccc88e24eff3aedbff368ec9470d7447d6","/static/css/main.8aa8cdcf.css.map":"8bd3531ecc8bfa1f174477b35295f9c096a2ef375c0d74f33b21c5cbbd45bcd4","/favicon.ico":"d975626de3383ff4bf8c274c3646b996beef5a7df5b21d821beb4c91c48625c5","/logo192.png":"5a9866ea440360e20e519aa866cb62d4ab69d976cc91b6b3facf4f11f498bd4a","/logo512.png":"e0fba9f8b772511b3ddc8484ed598988f42d2c0ab252410d37f4713433638ea4","/static/js/main.2a7d0f6c.js":"1490b905452e342a83fe481afba09ac863bc488909428147c8b58c68577d8e01","/static/js/main.2a7d0f6c.js.map":"a3df0c4c75077401c0f31e9a695d91be71573188c6e73b263b9b111425abc2c9"}}
+[debug] [2022-11-02T20:31:45.434Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/559234356201/sites/salkigcl-app/versions/fe2873fdc4698a71:populateFiles 200
+[debug] [2022-11-02T20:31:45.435Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/559234356201/sites/salkigcl-app/versions/fe2873fdc4698a71:populateFiles {"uploadRequiredHashes":["7291eaf209025009a57439a020f23e741a495d975498a39601b92d1225d8e814","1490b905452e342a83fe481afba09ac863bc488909428147c8b58c68577d8e01","f1674d1305e5fde4c0a1dd6b5529751cdd12ed8f77f193709a84147d64d02d62","a3df0c4c75077401c0f31e9a695d91be71573188c6e73b263b9b111425abc2c9","8bd3531ecc8bfa1f174477b35295f9c096a2ef375c0d74f33b21c5cbbd45bcd4","ebcee23937aa197795b1595593aac94a31f2d903b0d5531558297ae10ccf80b2"],"uploadUrl":"https://upload-firebasehosting.googleapis.com/upload/sites/salkigcl-app/versions/fe2873fdc4698a71/files"}
+[debug] [2022-11-02T20:31:45.436Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/salkigcl-app/versions/fe2873fdc4698a71/files/7291eaf209025009a57439a020f23e741a495d975498a39601b92d1225d8e814 [none]
+[debug] [2022-11-02T20:31:45.436Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/salkigcl-app/versions/fe2873fdc4698a71/files/7291eaf209025009a57439a020f23e741a495d975498a39601b92d1225d8e814 [stream]
+[debug] [2022-11-02T20:31:45.437Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/salkigcl-app/versions/fe2873fdc4698a71/files/1490b905452e342a83fe481afba09ac863bc488909428147c8b58c68577d8e01 [none]
+[debug] [2022-11-02T20:31:45.437Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/salkigcl-app/versions/fe2873fdc4698a71/files/1490b905452e342a83fe481afba09ac863bc488909428147c8b58c68577d8e01 [stream]
+[debug] [2022-11-02T20:31:45.438Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/salkigcl-app/versions/fe2873fdc4698a71/files/f1674d1305e5fde4c0a1dd6b5529751cdd12ed8f77f193709a84147d64d02d62 [none]
+[debug] [2022-11-02T20:31:45.438Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/salkigcl-app/versions/fe2873fdc4698a71/files/f1674d1305e5fde4c0a1dd6b5529751cdd12ed8f77f193709a84147d64d02d62 [stream]
+[debug] [2022-11-02T20:31:45.439Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/salkigcl-app/versions/fe2873fdc4698a71/files/a3df0c4c75077401c0f31e9a695d91be71573188c6e73b263b9b111425abc2c9 [none]
+[debug] [2022-11-02T20:31:45.439Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/salkigcl-app/versions/fe2873fdc4698a71/files/a3df0c4c75077401c0f31e9a695d91be71573188c6e73b263b9b111425abc2c9 [stream]
+[debug] [2022-11-02T20:31:45.440Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/salkigcl-app/versions/fe2873fdc4698a71/files/8bd3531ecc8bfa1f174477b35295f9c096a2ef375c0d74f33b21c5cbbd45bcd4 [none]
+[debug] [2022-11-02T20:31:45.440Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/salkigcl-app/versions/fe2873fdc4698a71/files/8bd3531ecc8bfa1f174477b35295f9c096a2ef375c0d74f33b21c5cbbd45bcd4 [stream]
+[debug] [2022-11-02T20:31:45.442Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/salkigcl-app/versions/fe2873fdc4698a71/files/ebcee23937aa197795b1595593aac94a31f2d903b0d5531558297ae10ccf80b2 [none]
+[debug] [2022-11-02T20:31:45.442Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/salkigcl-app/versions/fe2873fdc4698a71/files/ebcee23937aa197795b1595593aac94a31f2d903b0d5531558297ae10ccf80b2 [stream]
+[debug] [2022-11-02T20:31:45.443Z] [hosting][populate queue][FINAL] {"max":9714,"min":9714,"avg":9714,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":9722}
+[debug] [2022-11-02T20:31:45.443Z] [hosting] uploads queued: 6
+[debug] [2022-11-02T20:31:49.530Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/salkigcl-app/versions/fe2873fdc4698a71/files/7291eaf209025009a57439a020f23e741a495d975498a39601b92d1225d8e814 200
+[debug] [2022-11-02T20:31:49.530Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/salkigcl-app/versions/fe2873fdc4698a71/files/7291eaf209025009a57439a020f23e741a495d975498a39601b92d1225d8e814 [stream]
+[debug] [2022-11-02T20:31:49.530Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/salkigcl-app/versions/fe2873fdc4698a71/files/f1674d1305e5fde4c0a1dd6b5529751cdd12ed8f77f193709a84147d64d02d62 200
+[debug] [2022-11-02T20:31:49.531Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/salkigcl-app/versions/fe2873fdc4698a71/files/f1674d1305e5fde4c0a1dd6b5529751cdd12ed8f77f193709a84147d64d02d62 [stream]
+[debug] [2022-11-02T20:31:49.593Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/salkigcl-app/versions/fe2873fdc4698a71/files/ebcee23937aa197795b1595593aac94a31f2d903b0d5531558297ae10ccf80b2 200
+[debug] [2022-11-02T20:31:49.593Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/salkigcl-app/versions/fe2873fdc4698a71/files/ebcee23937aa197795b1595593aac94a31f2d903b0d5531558297ae10ccf80b2 [stream]
+[debug] [2022-11-02T20:31:50.108Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/salkigcl-app/versions/fe2873fdc4698a71/files/8bd3531ecc8bfa1f174477b35295f9c096a2ef375c0d74f33b21c5cbbd45bcd4 200
+[debug] [2022-11-02T20:31:50.109Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/salkigcl-app/versions/fe2873fdc4698a71/files/8bd3531ecc8bfa1f174477b35295f9c096a2ef375c0d74f33b21c5cbbd45bcd4 [stream]
+[debug] [2022-11-02T20:31:51.447Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/salkigcl-app/versions/fe2873fdc4698a71/files/a3df0c4c75077401c0f31e9a695d91be71573188c6e73b263b9b111425abc2c9 200
+[debug] [2022-11-02T20:31:51.448Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/salkigcl-app/versions/fe2873fdc4698a71/files/a3df0c4c75077401c0f31e9a695d91be71573188c6e73b263b9b111425abc2c9 [stream]
+[debug] [2022-11-02T20:32:08.353Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/salkigcl-app/versions/fe2873fdc4698a71/files/1490b905452e342a83fe481afba09ac863bc488909428147c8b58c68577d8e01 200
+[debug] [2022-11-02T20:32:08.353Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/salkigcl-app/versions/fe2873fdc4698a71/files/1490b905452e342a83fe481afba09ac863bc488909428147c8b58c68577d8e01 [stream]
+[debug] [2022-11-02T20:32:08.353Z] [hosting][upload queue][FINAL] {"max":22918,"min":4095,"avg":7658.5,"active":0,"complete":6,"success":6,"errored":0,"retried":0,"total":6,"elapsed":22918}
+[info] ✔  hosting[salkigcl-app]: file upload complete 
+[debug] [2022-11-02T20:32:08.354Z] [hosting] deploy completed after 33174ms
+[debug] [2022-11-02T20:32:08.357Z] [
+  {
+    "config": {
+      "target": "app",
+      "public": "build",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "site": "salkigcl-app"
+    },
+    "version": "projects/559234356201/sites/salkigcl-app/versions/fe2873fdc4698a71"
+  }
+]
+[info] i  hosting[salkigcl-app]: finalizing version... 
+[debug] [2022-11-02T20:32:08.359Z] >>> [apiv2][query] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/salkigcl-app/versions/fe2873fdc4698a71 updateMask=status%2Cconfig
+[debug] [2022-11-02T20:32:08.359Z] >>> [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/salkigcl-app/versions/fe2873fdc4698a71 {"status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]}}
+[debug] [2022-11-02T20:32:10.811Z] <<< [apiv2][status] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/salkigcl-app/versions/fe2873fdc4698a71 200
+[debug] [2022-11-02T20:32:10.811Z] <<< [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/salkigcl-app/versions/fe2873fdc4698a71 {"name":"projects/559234356201/sites/salkigcl-app/versions/fe2873fdc4698a71","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2022-11-02T20:31:33.609090Z","createUser":{"email":"abdulwadudsab@gmail.com"},"finalizeTime":"2022-11-02T20:32:10.391296Z","finalizeUser":{"email":"abdulwadudsab@gmail.com"}}
+[debug] [2022-11-02T20:32:10.811Z] [hosting] finalized version for salkigcl-app:[object Object]
+[info] ✔  hosting[salkigcl-app]: version finalized 
+[info] i  hosting[salkigcl-app]: releasing new version... 
+[debug] [2022-11-02T20:32:10.812Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/salkigcl-app/channels/live/releases versionName=projects%2F559234356201%2Fsites%2Fsalkigcl-app%2Fversions%2Ffe2873fdc4698a71
+[debug] [2022-11-02T20:32:10.812Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/salkigcl-app/channels/live/releases {}
+[debug] [2022-11-02T20:32:25.250Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/salkigcl-app/channels/live/releases 200
+[debug] [2022-11-02T20:32:25.250Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/salkigcl-app/channels/live/releases {"name":"projects/559234356201/sites/salkigcl-app/channels/live/releases/1667421143897650","version":{"name":"projects/559234356201/sites/salkigcl-app/versions/fe2873fdc4698a71","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2022-11-02T20:31:33.609090Z","createUser":{"email":"abdulwadudsab@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ALm5wu1yuGUPVeTzH9HOdZu3CYQZScBCiSx9NJKX6o55=mo"},"finalizeTime":"2022-11-02T20:32:10.391296Z","finalizeUser":{"email":"abdulwadudsab@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ALm5wu1yuGUPVeTzH9HOdZu3CYQZScBCiSx9NJKX6o55=mo"}},"type":"DEPLOY","releaseTime":"2022-11-02T20:32:23.897650558Z","releaseUser":{"email":"abdulwadudsab@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ALm5wu1yuGUPVeTzH9HOdZu3CYQZScBCiSx9NJKX6o55=mo"}}
+[debug] [2022-11-02T20:32:25.250Z] [hosting] release: {"name":"projects/559234356201/sites/salkigcl-app/channels/live/releases/1667421143897650","version":{"name":"projects/559234356201/sites/salkigcl-app/versions/fe2873fdc4698a71","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2022-11-02T20:31:33.609090Z","createUser":{"email":"abdulwadudsab@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ALm5wu1yuGUPVeTzH9HOdZu3CYQZScBCiSx9NJKX6o55=mo"},"finalizeTime":"2022-11-02T20:32:10.391296Z","finalizeUser":{"email":"abdulwadudsab@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ALm5wu1yuGUPVeTzH9HOdZu3CYQZScBCiSx9NJKX6o55=mo"}},"type":"DEPLOY","releaseTime":"2022-11-02T20:32:23.897650558Z","releaseUser":{"email":"abdulwadudsab@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ALm5wu1yuGUPVeTzH9HOdZu3CYQZScBCiSx9NJKX6o55=mo"}}
+[info] ✔  hosting[salkigcl-app]: release complete 
+[info] 
+[info] ✔  Deploy complete! 
+[info] 
+[info] Project Console: https://console.firebase.google.com/project/salkigcl/overview
+[info] Hosting URL: https://salkigcl-app.web.app
+[debug] [2022-11-02T20:32:38.979Z] Error: Timed out.
+    at Timeout._onTimeout (/usr/local/lib/node_modules/firebase-tools/lib/utils.js:253:49)
+    at listOnTimeout (node:internal/timers:559:17)
+    at processTimers (node:internal/timers:502:7)
+[error] 
+[error] Error: An unexpected error has occurred.

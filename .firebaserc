@@ -1,5 +1,18 @@
 {
   "projects": {
     "default": "salkigcl"
-  }
+  },
+  "targets": {
+    "salkigcl": {
+      "hosting": {
+        "public": [
+          "salkigcl"
+        ],
+        "app": [
+          "salkigcl-app"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
