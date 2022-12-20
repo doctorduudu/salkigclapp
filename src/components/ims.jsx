@@ -82,10 +82,14 @@ const IMS = () => {
       let profit = 0;
       let profitMargin = 0;
       costPrice = costPrice + selectedRows[x].costPrice;
-      profit =
-        profit + (selectedRows[x].sellingPrice - selectedRows[x].costPrice);
+      profit = parseFloat(
+        (
+          profit +
+          (selectedRows[x].sellingPrice - selectedRows[x].costPrice)
+        ).toFixed(2)
+      );
       profitMargin = parseFloat(
-        (profitMargin + (profit / costPrice) * 100).toFixed(1)
+        (profitMargin + (profit / costPrice) * 100).toFixed(2)
       );
       const sale = {
         productName: selectedRows[x].name,
@@ -274,7 +278,6 @@ const IMS = () => {
     }
 
     const addProductButton = document.getElementById("submit-product-button");
-    console.log(addProductButton);
     addProductButton.disabled = true;
     addProductButton.style.backgroundColor = "grey";
     // return;
@@ -476,31 +479,36 @@ const IMS = () => {
       soldProduct.soldBy = {
         email: user.email,
         id: user.uid,
-        displayName: user.displayName,
       };
 
       const indexOfProductBeingSold = selectedRows.findIndex(
         (product) => product.productCode === soldProduct.productCode
       );
       // console.log(indexOfProductBeingSold);
-      const productFirebaseId = `${soldProduct.dateAdded.toString()}_${
-        indexOfProductBeingSold + 1
-      }`;
+      let productFirebaseId = `${soldProduct.dateAdded.toString()}`;
+      if (selectedRows.length > 1) {
+        productFirebaseId = `${soldProduct.dateAdded.toString()}_${
+          indexOfProductBeingSold + 1
+        }`;
+      }
       soldProduct.saleId = productFirebaseId;
 
       //set the total amount for each sale
       soldProduct.totalAmount =
         Number(soldProduct.quantitySold) * Number(soldProduct.unitPrice);
 
-      const profit =
-        soldProduct.totalAmount -
-        soldProduct.profitData.costPrice * soldProduct.quantitySold;
+      const profit = parseFloat(
+        (
+          soldProduct.totalAmount -
+          soldProduct.profitData.costPrice * soldProduct.quantitySold
+        ).toFixed(2)
+      );
       const profitMargin = parseFloat(
         (
           (profit /
             (soldProduct.profitData.costPrice * soldProduct.quantitySold)) *
           100
-        ).toFixed(1)
+        ).toFixed(2)
       );
       // console.log("profit", profit);
       // console.log("profit margin", profitMargin);
@@ -517,11 +525,10 @@ const IMS = () => {
         soldProduct.quantitySold;
       setProductsData(productsArray);
 
-      setDoc(doc(db, "sales", productFirebaseId), soldProduct).then(() => {
-        toast.success(
-          `${soldProduct.productName} (${soldProduct.productDescription}) confirmed sold.`
-        );
-      });
+      setDoc(doc(db, "sales", productFirebaseId), soldProduct);
+      toast.success(
+        `${soldProduct.productName} (${soldProduct.productDescription}) confirmed sold.`
+      );
 
       updateDoc(doc(db, "products", soldProduct.productCode.toString()), {
         quantityAvailable: increment(-soldProduct.quantitySold),
@@ -575,7 +582,7 @@ const IMS = () => {
       // console.log(totalAmountDue);
     }
 
-    return totalAmountDue;
+    return parseFloat(totalAmountDue.toFixed(2));
   };
 
   return (

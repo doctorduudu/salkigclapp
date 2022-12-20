@@ -28,6 +28,7 @@ const InventorySales = () => {
   useEffect(() => {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     setUser(currentUser);
+    let salesToday = [];
 
     const dateObj = new Date();
     const today = `${dateObj.getDate()} ${dateObj.getMonth()} ${dateObj.getFullYear()}`;
@@ -37,7 +38,6 @@ const InventorySales = () => {
     const colRef = collection(db, "sales");
     onSnapshot(colRef, (snapshot) => {
       const sales = [];
-      let salesToday = [];
       let salesThisWeek = [];
       let salesThisMonth = [];
       let salesThisYear = [];
@@ -77,27 +77,13 @@ const InventorySales = () => {
             `${date.getDate()} ${date.getMonth()} ${date.getFullYear()}`
           );
         }
-        // console.log(daysOfTheWeekString);
-
-        // console.log(daysOfTheWeek);
-
-        // console.log(doc.data().productCode);
-        // console.log(doc.data().dateData.day);
-        // console.log("first day of week", sale.dateData.day - firstDayOfWeek);
-        // console.log("last day of week", sale.dateData.day + lastDayOfWeek);
 
         if (sale.dateData.fullDay === today) {
           salesToday.push(sale);
           // console.log("today sale", sale);
         }
-        if (
-          // sale.dateData.day > firstDayOfWeek - 1 &&
-          // sale.dateData.day < lastDayOfWeek + 1 &&
-          // sale.dateData.fullMonth === thisMonth
-          daysOfTheWeekString.includes(sale.dateData.fullDay)
-        ) {
+        if (daysOfTheWeekString.includes(sale.dateData.fullDay)) {
           // console.log("week sale", sale);
-
           salesThisWeek.push(sale);
         }
         if (sale.dateData.fullMonth === thisMonth) {
@@ -121,12 +107,9 @@ const InventorySales = () => {
       setWeekSales(salesThisWeek);
       setMonthSales(salesThisMonth);
       setYearSales(salesThisYear);
-      setPeriodSalesArray(salesToday); //default
     });
-    // .then((snapshot) => {
-    // })
-    // .then(() => {
-    // });
+
+    setPeriodSalesArray(salesToday); //default
   }, []);
 
   const getColor = (period) => {
@@ -182,13 +165,17 @@ const InventorySales = () => {
       profitTotal = profitTotal + periodSalesArray[x].profitData.profit;
     }
     // console.log(profitTotal);
-    return profitTotal;
+    return parseFloat(profitTotal.toFixed(2));
   };
 
   const getProfitMargin = () => {
     const profit = getTotalProfit();
     const sales = getTotalSales();
-    const profitMargin = parseFloat((profit / sales) * 100).toFixed(1);
+    // console.log(profit, sales);
+    let profitMargin = parseFloat(((profit / sales) * 100).toFixed(2));
+    if (profit === 0 && sales === 0) {
+      profitMargin = 0;
+    }
     return profitMargin;
   };
 
@@ -354,38 +341,34 @@ const InventorySales = () => {
     editSaleButton.style.backgroundColor = "grey";
 
     let costPrice = saleToBeEdited.profitData.costPrice;
-    const profit =
-      saleToBeEdited.totalAmount - costPrice * saleToBeEdited.quantitySold;
+    const profit = parseFloat(
+      (
+        saleToBeEdited.totalAmount -
+        costPrice * saleToBeEdited.quantitySold
+      ).toFixed(2)
+    );
     const profitMargin = parseFloat(
-      ((profit / (costPrice * saleToBeEdited.quantitySold)) * 100).toFixed(1)
+      ((profit / (costPrice * saleToBeEdited.quantitySold)) * 100).toFixed(2)
     );
     saleToBeEdited.profitData.profit = profit;
     saleToBeEdited.profitData.profitMargin = profitMargin;
 
     saleToBeEdited.lastEdited = {
-      editedBy: user,
+      editedBy: user.email,
+      editorId: user.uid,
       timeEdited: Date.now(),
     };
 
     setDoc(
       doc(db, "sales", saleToBeEdited.firebaseId.toString()),
       saleToBeEdited
-    ).then(() => {
-      toast.success(
-        "Sale was updated. Refresh if changes do not effect immediately"
-      );
-      editSaleButton.disabled = false;
-      editSaleButton.style.backgroundColor = "green";
-      setOpenEditSale(false);
-      // const indexOfSaleBeingEdited = periodSalesArray.findIndex(
-      //   (sale) => sale.saleId === saleToBeEdited.saleId
-      // );
-      // let newPeriodSalesArray = [...periodSalesArray];
-      // newPeriodSalesArray[indexOfSaleBeingEdited] = saleToBeEdited;
-      // setPeriodSalesArray(newPeriodSalesArray);
-    });
-
-    console.log(saleOnEdit);
+    );
+    toast.success(
+      "Sale was updated. Refresh if changes do not effect immediately"
+    );
+    editSaleButton.disabled = false;
+    editSaleButton.style.backgroundColor = "green";
+    setOpenEditSale(false);
   };
 
   const handleChange = ({ currentTarget: input }) => {
@@ -523,7 +506,7 @@ const InventorySales = () => {
               >
                 {sale.soldBy && (
                   <Typography variant="caption">
-                    By: {sale.soldBy.displayName}
+                    By: {sale.soldBy.email}
                   </Typography>
                 )}
                 <Typography variant="caption">

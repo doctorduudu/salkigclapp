@@ -3,6 +3,8 @@ import HomeIcon from "@mui/icons-material/Home";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Button } from "@mui/material";
 
 const Footer = () => {
   return (

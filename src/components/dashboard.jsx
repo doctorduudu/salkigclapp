@@ -106,16 +106,23 @@ const Dashboard = () => {
       toast.error("You must be online to sign in!");
       return;
     }
-    console.log(userAuthData.email, userAuthData.password);
+
+    const signInButton = document.getElementById("sign-in-button");
+    signInButton.disabled = true;
+    signInButton.style.backgroundColor = "grey";
+
+    // console.log(userAuthData.email, userAuthData.password);
     signInWithEmailAndPassword(auth, userAuthData.email, userAuthData.password)
       .then((userCredential) => {
         const user = userCredential.user;
+        signInButton.disabled = true;
+        signInButton.style.backgroundColor = "grey";
         setUserAuthData({ email: "", password: "" });
         setUser(user);
         setOpenSignInUser(false);
       })
       .catch((error) => {
-        console.log(error.code);
+        // console.log(error.code);
         if (error.code === "auth/wrong-password") {
           toast.error("Wrong password");
         } else if (error.code === "auth/user-not-found") {
@@ -183,13 +190,11 @@ const Dashboard = () => {
     // return;
 
     const currentMessages = [...messages];
-    deleteDoc(doc(db, "messages", deletingMessage.dateAdded.toString())).then(
-      () => {
-        toast.success("Message deleted");
-        removeMessageButton.disabled = false;
-        setOpenConfirmDelete(false);
-      }
-    );
+    deleteDoc(doc(db, "messages", deletingMessage.dateAdded.toString()));
+    toast.success("Message deleted");
+    removeMessageButton.disabled = false;
+    setOpenConfirmDelete(false);
+
     const newMessagesArray = currentMessages.filter(
       (message) => message.dateAdded !== deletingMessage.dateAdded
     );
@@ -215,13 +220,12 @@ const Dashboard = () => {
 
       <div
         id="login-section"
-        style={{ textAlign: "center", margin: "10px auto" }}
+        style={{ textAlign: "center", margin: "10px 10px" }}
       >
         <Typography
           variant="body1"
           component="span"
           style={{
-            textTransform: "capitalize",
             paddingRight: "10px",
             fontSize: "20px",
           }}
@@ -234,6 +238,7 @@ const Dashboard = () => {
             variant="contained"
             onClick={showSignInUser}
             style={{ color: "#fff" }}
+            id="sign-in-button"
           >
             Sign In
           </Button>
